@@ -10,7 +10,7 @@ import { getAuth, GoogleAuthProvider,createUserWithEmailAndPassword, signInWithE
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY ,
+  apiKey:"AIzaSyD6LYkjJDJ1PYdAPcfMRkPTlam3Qrxrgns" ,
   authDomain: "ai-exam-correction.firebaseapp.com",
   projectId: "ai-exam-correction",
   storageBucket: "ai-exam-correction.firebasestorage.app",
