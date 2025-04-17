@@ -19,15 +19,7 @@ import PyPDF2
 
 load_dotenv()
 
-class PageExtraction(BaseModel):
-    page_number: int
-    text: str
-    visual_description: str
-    confidence_text: float
-    confidence_visual: float
 
-class ExtractionResults(BaseModel):
-    extractions: List[PageExtraction]
 
 def save_pdf_images(pdf_path, output_folder, scale=4):
     os.makedirs(output_folder, exist_ok=True)
