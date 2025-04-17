@@ -14,7 +14,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import pypdfium2 as pdfium
 import PyPDF2
-from grading import grade_student_answers
+
 
 
 load_dotenv()
@@ -190,6 +190,7 @@ def extract_text_and_visuals(
   
     if num_images:
         image_paths = image_paths[:num_images]
+        print(image_paths)
 
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
@@ -212,7 +213,7 @@ def extract_text_and_visuals(
                 {
                     "role": "system",
                     "content": """
-                    You are an expert image analyzer that extracts text and describes visuals.
+                    You are an expert image analyzer that extracts text and describes visuals(documents, graphs, circuits, diagrams) from imagesuse hIMPORTANT! - If the page contains mathematical expressions, **transcribe them using plain text mathematical symbols (*, +, -, /, ^, √, ∫, ∂, ∑, etc.) rather than LaTeX format**
                     Return your analysis in JSON format as an array of objects with these properties:
                     - page_number: The sequential number of the image
                     - text: The extracted text content
@@ -224,11 +225,14 @@ def extract_text_and_visuals(
                 user_message
             ],
             model=model,
-            temperature=0,
-            stream=False
+            temperature=1,
+            max_completion_tokens=8192,
+            top_p=1,
+            stop=None,
         )
         
         response_text = chat_completion.choices[0].message.content
+        print(response_text)
         
         try:
             start_idx = response_text.find('[')
@@ -358,10 +362,123 @@ def extract_text_from_pdf(pdf_path):
         print(f"An error occurred while extracting text: {e}")
     
     return extracted_text
+
+
+
+def grade_student_answers(answer_key: str, student_answer: str) -> str:
+
+    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": f"""
+                You are an expert evaluator grading student answers against an answer key. 
+                Evaluate each student response based on the marking scheme provided in the answer key. Verify whether the required points are awarded for the corresponding criteria and ensure that the content is sufficiently detailed and comprehensive for the allocated marks.
+                The output must be in JSON format following this schema:
+                {{
+                    "total_score": ,
+                    "total_possible": ,
+                    "percentage": ,
+                    "questions": [
+                        {{
+                            "question_number": ,
+                            "points_earned": ,
+                            "points_possible": ,
+                            "justification": "",
+                            "feedback": ""
+                        }}
+                        // More items for each question...
+                    ]
+                }}
+                The total_score should be the sum of points_earned for each question.
+                
+                """
+            },
+            {
+                "role": "user",
+                "content": f"""
+                ANSWER KEY:
+                {answer_key}
+
+                STUDENT ANSWER:
+                {student_answer}
+
+                Instructions:
+                1. Compare each student response to the corresponding question in the answer key.
+                2. Award points based on how well the student answer matches the criteria in the marking scheme.
+                3. Provide brief justification for each score.
+                4. Calculate the total score earned correctly.
+                5. Provide feedback for each question 
+                """
+            }
+        ],
+        model="meta-llama/llama-4-scout-17b-16e-instruct",#meta-llama/llama-4-maverick-17b-128e-instruct
+        temperature=0,
+        stream=False,
+        response_format={"type": "json_object"},
+    )
+    
+    response_text = chat_completion.choices[0].message.content
+    try:
+            start_idx = response_text.find('[')
+            end_idx = response_text.rfind(']') + 1
+            
+            if start_idx >= 0 and end_idx > start_idx:
+                json_str = response_text[start_idx:end_idx]
+                data = json.loads(json_str)
+            else:
+                data = json.loads(response_text)
+                if isinstance(data, dict) and 'extractions' in data:
+                    data = data['extractions']
+            
+            return data
+    except json.JSONDecodeError as je:
+            print(f"Failed to parse JSON response: {je}")
+            print(f"Raw response: {response_text}")
+            return []
+    
+    except Exception as e:
+        print(f"Error during API call: {e}")
+        return []
+    
+
+
+def format_grading_result_to_string(result: List[Dict[str, Any]]) -> str:
+    output = []
+    total_score = sum(q["points_earned"] for q in result)
+    total_possible = sum(q["points_possible"] for q in result)
+    percentage = (total_score / total_possible) * 100 if total_possible > 0 else 0
+
+    output.append("STUDENT ASSESSMENT RESULTS")
+    output.append("=" * 50)
+    output.append("")
+    output.append("SUMMARY")
+    output.append(f"Total Score: {total_score}/{total_possible}")
+    output.append(f"Percentage: {percentage:.1f}%")
+    output.append("")
+    output.append("DETAILED ASSESSMENT")
+    output.append("=" * 50)
+
+    for question in result:
+        output.append(f"Question {question['question_number']}")
+        output.append(f"Score: {question['points_earned']}/{question['points_possible']}")
+        output.append("")
+        output.append("Justification:")
+        output.append(question["justification"])
+        output.append("")
+        output.append("Feedback:")
+        output.append(question["feedback"])
+        output.append("")
+        output.append("-" * 40)
+
+    return "\n".join(output)
+
 def main():
     pdf_path = input("Enter the path to the PDF file: ") 
     output_folder = input("Enter the output folder for images: ")
-    batch_size = 5
+    batch_size = 1
     
     combined_text, confidence_scores = process_pdf_to_text(pdf_path, output_folder, batch_size=batch_size)
     
@@ -377,7 +494,9 @@ def main():
     create_pdf_with_text(output_folder, name, "Extracted Text", combined_text)
     answer_key_path = input("Enter the path to the answer key PDF file: ")
     answer_key = extract_text_from_pdf(answer_key_path)
+    print(answer_key)
     data = grade_student_answers(answer_key, combined_text)
+    data = format_grading_result_to_string(data)
     print(data)
     output_folder = input("Enter the output folder for pdf: ")
     name = input("Enter the name of the output PDF file with extension: ") 
