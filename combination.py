@@ -14,10 +14,11 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import pypdfium2 as pdfium
 import PyPDF2
-
+from pylatexenc.latex2text import LatexNodes2Text
 
 
 load_dotenv()
+
 
 
 
@@ -52,6 +53,7 @@ def delete_first_n_images(folder_path, n):
     except Exception as e:
         pass
 def create_pdf_with_text(folder_path, output_file_name, title, text):
+
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     output_path = os.path.join(folder_path, output_file_name)
@@ -91,46 +93,6 @@ def create_pdf_with_text(folder_path, output_file_name, title, text):
     content = []
     content.append(Paragraph(title, title_style))
     content.append(Spacer(1, 20))
-    math_replacements = {
-        '\\partial': '&part;',
-        '\\int': '&#8747;',
-        '\\sum': '&#8721;',
-        '\\alpha': '&alpha;',
-        '\\beta': '&beta;',
-        '\\gamma': '&gamma;',
-        '\\delta': '&delta;',
-        '\\Delta': '&Delta;',
-        '\\pi': '&pi;',
-        '\\Pi': '&Pi;',
-        '\\phi': '&phi;',
-        '\\infty': '&infin;',
-        '\\times': '&times;',
-        '\\div': '&divide;',
-        '\\pm': '&plusmn;',
-        '\\leq': '&le;',
-        '\\geq': '&ge;',
-        '\\neq': '&ne;',
-        '\\approx': '&asymp;',
-        '\\equiv': '&equiv;',
-        '\\ldots': '&hellip;',
-        '\\theta': '&theta;',
-        '\\lambda': '&lambda;',
-        '\\mu': '&mu;',
-        '\\nu': '&nu;',
-        '\\rho': '&rho;',
-        '\\sigma': '&sigma;',
-        '\\tau': '&tau;',
-        '\\omega': '&omega;',
-        '^2': '<sup>2</sup>',
-        '^3': '<sup>3</sup>',
-        '_2': '<sub>2</sub>',
-        '_3': '<sub>3</sub>',
-    }
-    for old, new in math_replacements.items():
-        text = text.replace(old, new)
-    text = text.replace('∫', '&#8747;')
-    text = text.replace('∂', '&part;')
-    text = text.replace('λ', '&lambda;')
     paragraphs = []
     current_paragraph = []
     for line in text.split('\n'):
@@ -169,6 +131,8 @@ def create_pdf_with_text(folder_path, output_file_name, title, text):
     print(f"PDF created successfully at {output_path}")
 
 
+
+
 def encode_image(image_path: str) -> str:
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
@@ -205,7 +169,7 @@ def extract_text_and_visuals(
                 {
                     "role": "system",
                     "content": """
-                    You are an expert image analyzer that extracts text and describes visuals(documents, graphs, circuits, diagrams) from imagesuse hIMPORTANT! - If the page contains mathematical expressions, **transcribe them using plain text mathematical symbols (*, +, -, /, ^, √, ∫, ∂, ∑, etc.) rather than LaTeX format**
+                    You are an expert image analyzer that extracts text and describes visuals(documents, graphs, circuits, diagrams) from imagesuse hIMPORTANT! - If the page contains mathematical expressions, **transcribe them using latex format only**
                     Return your analysis in JSON format as an array of objects with these properties:
                     - page_number: The sequential number of the image
                     - text: The extracted text content
@@ -304,13 +268,7 @@ def process_pdf_to_text(pdf_path: str, output_folder: str, batch_size: int = 5) 
         "Your tasks:\n"
         "1. If the page contains **handwritten text**, extract it ***exactly as it appears, maintaining original spelling, punctuation, line breaks, and spacing***. Use escape sequences like `\\n` for newlines and `\\t` for tabs to represent formatting.\n"
         "2. If the page contains **visual content** (like graphs, circuits, diagrams), provide a detailed, structured **technical description**.\n\n"
-        "3. IMPORTANT! - If the page contains mathematical expressions, **transcribe them using plain text mathematical symbols (*, +, -, /, ^, √, ∫, ∂, ∑, etc.) rather than LaTeX format**. For example, write '∫ f(x) dx' or 'y = x²' instead of '$\\int f(x) dx$' or '$y = x^2$'.\n\n"
-        "Examples of mathematical notation to use:\n" 
-        "- Use ∂ for partial derivatives, not '\\partial'\n"
-        "- Use direct symbols like ∫, ∑, π, θ, ∞\n"
-        "- Use superscripts for powers (x²) or indicate with ^ (x^2)\n"
-        "- For fractions, use / or describe with clear structure (a/b)\n"
-        "- Use symbols like →, ≤, ≥, ≠, ≈ directly\n\n"
+        "3. IMPORTANT! - If the page contains mathematical expressions, **transcribe them using   LaTeX format suing lvalid syntax**.\n\n"
         "Examples of what to include in a visual description:\n"
         "- For graphs: axis labels, units, scale/step (e.g., 'x-axis ranges from 0 to 10 with step of 0.1V'), curves, line styles, arrows, legends.\n"
         "- For circuits: all components, their arrangement, labels, and connections.\n"
@@ -467,6 +425,11 @@ def format_grading_result_to_string(result: List[Dict[str, Any]]) -> str:
 
     return "\n".join(output)
 
+def convert_latex_to_text(latex_content: str) -> str:
+    raw_latex_content = fr"{latex_content}"
+    return LatexNodes2Text().latex_to_text(raw_latex_content)
+
+
 def main():
     pdf_path = input("Enter the path to the PDF file: ") 
     output_folder = input("Enter the output folder for images: ")
@@ -475,6 +438,9 @@ def main():
     combined_text, confidence_scores = process_pdf_to_text(pdf_path, output_folder, batch_size=batch_size)
     
     print("Final Combined Text:")
+    print(combined_text)
+    combined_text = convert_latex_to_text(combined_text)
+    print("converted one")
     print(combined_text)
     
     print("\nConfidence Scores:")
