@@ -432,6 +432,36 @@ def convert_latex_to_text(latex_content: str) -> str:
     raw_latex_content = fr"{latex_content}"
     return LatexNodes2Text().latex_to_text(raw_latex_content)
 
+
+def create_database_and_table_v2():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password=password
+    )
+    cursor = conn.cursor()
+
+    cursor.execute("CREATE DATABASE IF NOT EXISTS student_evaluation")
+    cursor.execute("USE student_evaluation")
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS evaluations (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            subject VARCHAR(100),
+            gmail VARCHAR(100),
+            paper_id VARCHAR(50),
+            student_answer_url TEXT,
+            answer_key_url TEXT,
+            grading_url TEXT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+    print("✅ Database and table created successfully.")
+
+    
 def insert_evaluation_record(subject, gmail, paper_id,
                              student_answer_url, answer_key_url, grading_url,):
     conn = mysql.connector.connect(
