@@ -15,9 +15,12 @@ from reportlab.pdfbase.ttfonts import TTFont
 import pypdfium2 as pdfium
 import PyPDF2
 from pylatexenc.latex2text import LatexNodes2Text
-
-
+from typing import List, Dict
+import mysql.connector
 load_dotenv()
+password = os.getenv('MYSQL_PASSWORD')
+
+
 
 
 
@@ -429,16 +432,107 @@ def convert_latex_to_text(latex_content: str) -> str:
     raw_latex_content = fr"{latex_content}"
     return LatexNodes2Text().latex_to_text(raw_latex_content)
 
+def insert_evaluation_record(subject, gmail, paper_id,
+                             student_answer_url, answer_key_url, grading_url,):
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password=password,
+        database="student_evaluation"
+    )
+    cursor = conn.cursor()
+
+    query = """
+        INSERT INTO evaluations (
+            subject, gmail, paper_id,
+            student_answer_url, answer_key_url, grading_url
+            
+        )
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    values = (
+        subject, gmail, paper_id,
+        student_answer_url, answer_key_url, grading_url,
+    )
+
+    cursor.execute(query, values)
+    conn.commit()
+    conn.close()
+    print("✅ Record inserted successfully.")
+
+def get_evaluations_by_gmail(gmail: str) -> List[Dict]:
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password=password,
+            database="student_evaluation"
+        )
+        cursor = conn.cursor(dictionary=True)  
+
+        query = "SELECT * FROM evaluations WHERE gmail = %s"
+        cursor.execute(query, (gmail,))
+
+        results = cursor.fetchall()  
+        conn.close()
+
+        if results:
+            print(" Evaluation data retrieved successfully.")
+            return results  
+        else:
+            print(" No data found for the given Gmail.")
+            return []
+
+    except mysql.connector.Error as e:
+        print(f"Error retrieving data: {e}")
+        return []
+
+def extract_text_from_evaluations(gmail):
+    evaluation_data = get_evaluations_by_gmail(gmail)
+    if not evaluation_data:
+        return "No evaluation data found for the given Gmail."
+    
+    formatted_output = ""
+    for idx, record in enumerate(evaluation_data, start=1):
+        try:
+            record_info = f"Processing Record {idx}: {record}"
+            # print(record_info)
+            
+            formatted_output += f"{record_info}\n\n"
+            
+            student_answer_text = extract_text_from_pdf(record['student_answer_url'])
+            answer_key_text = extract_text_from_pdf(record['answer_key_url'])
+            grading_text = extract_text_from_pdf(record['grading_url'])
+            
+            formatted_output += f"Extracted Text for Record {idx}:\n"
+            formatted_output += f"Answer:\n{student_answer_text}\n\n"
+            formatted_output += f"Answer Key:\n{answer_key_text}\n\n"
+            formatted_output += f"Grading Notes:\n{grading_text}\n\n"
+            formatted_output += "-" * 50 + "\n\n"
+        except Exception as e:
+            error_message = f"❌ Error processing record {idx}: {e}"
+            print(error_message)
+            formatted_output += f"{error_message}\n"
+            formatted_output += "-" * 50 + "\n\n"
+    
+    return formatted_output
 
 def main():
+    gmail = input("Enter your Gmail: ")
+    subject = input("Enter the subject: ")
+    paper_id = input("Enter the paper ID: ")
+
     pdf_path = input("Enter the path to the PDF file: ") 
     output_folder = input("Enter the output folder for images: ")
+    
     batch_size = 1
     
     combined_text, confidence_scores = process_pdf_to_text(pdf_path, output_folder, batch_size=batch_size)
     
     print("Final Combined Text:")
     print(combined_text)
+    print("Type of combined text:")
+    print(type(combined_text))
     combined_text = convert_latex_to_text(combined_text)
     print("converted one")
     print(combined_text)
@@ -447,18 +541,28 @@ def main():
     for page, score in sorted(confidence_scores.items()):
         print(f"Page {page}: {score:.2f}")
     output_folder = input("Enter the output folder for pdf: ")
-    name = input("Enter the name of the output PDF file with extension: ") 
-
+    name = input("Enter the name of the output PDF file with extension: ")
+    extraction_text_path = os.path.abspath(os.path.join(output_folder, name))
     create_pdf_with_text(output_folder, name, "Extracted Text", combined_text)
     answer_key_path = input("Enter the path to the answer key PDF file: ")
     answer_key = extract_text_from_pdf(answer_key_path)
     print(answer_key)
     data = grade_student_answers(answer_key, combined_text)
+    print(data[0])
+    print(type(data[0]))
     data = format_grading_result_to_string(data)
     print(data)
     output_folder = input("Enter the output folder for pdf: ")
     name = input("Enter the name of the output PDF file with extension: ") 
+    grading_text_path = os.path.abspath(os.path.join(output_folder, name))
+
     create_pdf_with_text(output_folder, name, "Extracted Text", data)
+    print("*"*500)
+    insert_evaluation_record(subject,gmail,paper_id,extraction_text_path,answer_key_path,grading_text_path)
+    get_evaluations_by_gmail(gmail)
 
 if __name__ == "__main__":
     main()
+
+
+#note first one has datatyep stringa and the second one has list of dicts
