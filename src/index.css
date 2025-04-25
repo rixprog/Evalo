@@ -31,6 +31,8 @@
     @apply text-purple-600 hover:text-purple-700 font-medium cursor-pointer;
   }
 
+  
+
   .gradient-text {
     background: linear-gradient(to right, #d8b4fe, #c084fc);
     -webkit-background-clip: text;

@@ -20,9 +20,10 @@ interface GradingResults {
 
 interface DashboardProps {
   gradingResults: GradingResults | null;
+  onBackClick: () => void; // New prop for handling back button click
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ gradingResults }) => {
+const Dashboard: React.FC<DashboardProps> = ({ gradingResults, onBackClick }) => {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   if (!gradingResults) {
@@ -162,10 +163,22 @@ const Dashboard: React.FC<DashboardProps> = ({ gradingResults }) => {
         })}
       </div>
       
-      {/* Download Report Button */}
-      <div className="mt-8 text-center">
+      {/* Action Buttons */}
+      <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+        {/* Back Button */}
         <button 
-          className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-md hover:from-purple-700 hover:to-indigo-700 transition duration-150 ease-in-out flex items-center justify-center mx-auto"
+          className="rounded bg-gray-200 text-gray-700 px-4 py-2 hover:bg-gray-300 transition duration-150 ease-in-out flex items-center justify-center"
+          onClick={onBackClick}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Grade Another Exam
+        </button>
+        
+        {/* Download Report Button */}
+        <button 
+          className="rounded bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 hover:from-purple-700 hover:to-indigo-700 transition duration-150 ease-in-out flex items-center justify-center"
           onClick={downloadReport}
           disabled={isGenerating}
         >

@@ -110,10 +110,10 @@ const ModernNavbar: React.FC<ModernNavbarProps> = ({ user, handleLogout }) => {
               
               <button
                 onClick={handleLogout}
-                className="relative inline-flex items-center px-4 py-1.5 rounded-full overflow-hidden group"
+                className="rounded h-9 relative inline-flex items-center px-4 py-1.5 overflow-hidden group"
               >
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-purple-600 to-indigo-600 group-hover:from-purple-700 group-hover:to-indigo-700 transition duration-300"></span>
-                <span className="relative flex items-center justify-center text-xs font-semibold text-white">
+                <span className="relative flex items-center justify-center text-s font-semibold text-white">
                   Sign Out
                 </span>
               </button>

@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import Dashboard from './Dashboard';
 
 const DocumentUploader = () => {
@@ -20,6 +20,16 @@ const DocumentUploader = () => {
     if (e.target.files && e.target.files[0]) {
       setAnswerKeyPdf(e.target.files[0]);
     }
+  };
+
+  // Reset grading results to return to upload form
+  const handleBackClick = () => {
+    setGradingResults(null);
+    setStudentPdf(null);
+    setAnswerKeyPdf(null);
+    setError('');
+    setProgress(0);
+    setStatusText('');
   };
 
   // Function to simulate progress updates
@@ -83,7 +93,7 @@ const DocumentUploader = () => {
       
       const data = await response.json();
       setGradingResults(data);
-    }  catch (error: any) { // or create a more specific error type
+    } catch (error: any) { // or create a more specific error type
       console.error('Error uploading files:', error);
       setError(`Failed to process PDFs: ${error.message}`);
       setStatusText('Failed');
@@ -149,7 +159,7 @@ const DocumentUploader = () => {
               <button
                 type="submit"
                 disabled={isUploading}
-                className={`bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-md hover:from-purple-700 hover:to-indigo-700 transition duration-150 ease-in-out ${
+                className={`bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded hover:from-purple-700 hover:to-indigo-700 transition duration-150 ease-in-out ${
                   isUploading ? 'opacity-70 cursor-not-allowed' : ''
                 }`}
               >
@@ -175,7 +185,10 @@ const DocumentUploader = () => {
           </form>
         </div>
       ) : (
-        <Dashboard gradingResults={gradingResults} />
+        <Dashboard 
+          gradingResults={gradingResults} 
+          onBackClick={handleBackClick} // Pass the back button handler
+        />
       )}
     </div>
   );
