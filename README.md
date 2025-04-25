@@ -168,7 +168,7 @@ http://localhost:5173/
 ## 👨‍💻 Developers
 
 - **Riswan Muhammed M S** - [rixprog](https://github.com/rixprog)
-- **Surya Narayanana K V**
+- **Surya Narayanana K V** - [suryanarayanankv](https://github.com/suryanarayanankv)
 
 ## 📄 License
 
