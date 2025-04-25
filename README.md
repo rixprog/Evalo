@@ -19,15 +19,24 @@
   <strong>🚀 Correct answer sheets with ease using AI. Smart feedback. Fast grading.</strong>
 </p>
 
+<p align="center">
+  <em>Specialized in analyzing handwritten mathematical expressions, complex diagrams, and even the most challenging handwriting styles!</em>
+</p>
+
 ---
 
 ## 📚 About
 
 Evalo is a modern exam paper correction platform that automates the tedious task of evaluating student answer sheets. Simply upload the student's answer sheet PDF and the teacher's answer key — Evalo will instantly process the documents, evaluate each answer using advanced AI, and deliver precise scores with detailed feedback.
 
+The platform excels at processing handwritten content, including sophisticated mathematical expressions, technical diagrams, and various handwriting styles. Whether students write neatly or have challenging penmanship, Evalo's advanced AI can accurately interpret and evaluate their work.
+
 ## ✨ Features
 
 - 📄 **PDF Upload:** Upload student answer sheets and teacher answer keys in PDF format
+- ✏️ **Handwriting Recognition:** Accurately processes even difficult handwriting styles
+- 🧮 **Mathematical Expression Analysis:** Evaluates complex formulas, equations, and calculations
+- 📊 **Diagram Interpretation:** Understands and assesses student-drawn diagrams and illustrations
 - ⚡ **Groq API Integration:** Fast and intelligent text processing for accurate evaluations
 - 🧠 **AI-Powered Analysis:** Evaluates each answer, checks correctness, and provides comprehensive review
 - 💬 **Detailed Feedback:** Identifies mistakes and offers suggestions for improvement
