@@ -236,7 +236,7 @@
           <div className="min-h-screen flex items-center justify-center px-4">
             <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
               <div className="text-center">
-              <div className="flex justify-center items-center bg-gray-50">
+              <div className="flex justify-center items-center">
                 <h1 className="text-6xl font-extrabold tracking-tight">
                   <div className="bg-clip-text text-transparent bg-gradient-to-r from-purple-700 via-purple-500 to-indigo-500">
                     Evalo
