@@ -2,35 +2,47 @@
   <img src="https://raw.githubusercontent.com/rixprog/evalo/main/public/evalo-logo.png" alt="Evalo Logo" width="300" />
 </p>
 
-<h1 align="center">Evalo - AI-Based Exam Paper Evaluator</h1>
+<h1 align="center">Evalo</h1>
+<p align="center"><strong>AI-Based Exam Paper Evaluator</strong></p>
 
 <p align="center">
-  <strong>🚀 Correct answer sheets with ease using AI. Smart feedback. Fast grading.</strong><br />
-  🔗 <a href="https://evaloai.netlify.app/">Live Demo → evaloai.netlify.app</a>
+  <a href="https://evaloai.netlify.app/">Live Demo</a> •
+  <a href="#-about">About</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-usage">Usage</a> •
+  <a href="#-developers">Developers</a>
 </p>
+
+<p align="center">
+  <strong>🚀 Correct answer sheets with ease using AI. Smart feedback. Fast grading.</strong>
+</p>
+
+---
 
 ## 📚 About
 
-Evalo is a modern exam paper correction platform that automates the tedious task of evaluating student answer sheets. Just upload the student's answer sheet PDF and the teacher's answer key — Evalo will instantly process the documents, evaluate each answer using advanced AI, and deliver precise scores with detailed feedback.
+Evalo is a modern exam paper correction platform that automates the tedious task of evaluating student answer sheets. Simply upload the student's answer sheet PDF and the teacher's answer key — Evalo will instantly process the documents, evaluate each answer using advanced AI, and deliver precise scores with detailed feedback.
 
 ## ✨ Features
 
-- 📄 Upload student answer sheets and teacher answer keys in PDF format
-- ⚡ Uses **Groq API** for fast and intelligent text processing
-- 🧠 AI evaluates each answer, checks correctness, and provides a comprehensive review
-- 💬 Detailed feedback on mistakes and suggestions for improvement
-- 🔐 **Google and Email Authentication** using Firebase
-- ⚙️ Built with **FastAPI** for a robust backend and **React + TypeScript** for a sleek frontend
-- 🎨 Tailwind CSS for responsive, clean UI
-- ⚡ Vite for lightning-fast development experience
+- 📄 **PDF Upload:** Upload student answer sheets and teacher answer keys in PDF format
+- ⚡ **Groq API Integration:** Fast and intelligent text processing for accurate evaluations
+- 🧠 **AI-Powered Analysis:** Evaluates each answer, checks correctness, and provides comprehensive review
+- 💬 **Detailed Feedback:** Identifies mistakes and offers suggestions for improvement
+- 🔐 **Secure Authentication:** Google and Email sign-in via Firebase
+- 📊 **Downloadable Reports:** Export evaluations as structured PDFs
 
 ## 🔧 Tech Stack
 
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS
-- **Backend**: FastAPI (Python)
-- **AI Integration**: Groq API
-- **Auth**: Firebase (Google & Email)
-- **PDF Processing**: Custom pipeline for extracting and analyzing content
+| Component | Technologies |
+|-----------|-------------|
+| **Frontend** | React, TypeScript, Vite, Tailwind CSS |
+| **Backend** | FastAPI (Python) |
+| **AI Integration** | Groq API |
+| **Authentication** | Firebase (Google & Email) |
+| **PDF Processing** | Custom extraction pipeline |
 
 ## 📁 Project Structure
 
@@ -84,8 +96,7 @@ GROQ_API_KEY=your_groq_api_key
 PORT=8000
 
 # Frontend
-
-**Make sure to change the fetch links in the components section with your localhost api endpoints**
+# Note: Change the fetch links in components with your localhost API endpoints
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
 VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
@@ -137,16 +148,14 @@ http://localhost:5173/
 3. Set publish directory to `dist`
 4. Add environment variables from your `.env` file
 
-### Backend Deployment
-
-The FastAPI backend can be deployed to platforms like:
+### Backend Deployment Options
 
 - **Render**
 - **Heroku**
 - **AWS Lambda**
 - **GCP Cloud Functions**
 
-Make sure to set up the appropriate environment variables on your deployment platform.
+> ⚠️ Remember to set up the appropriate environment variables on your deployment platform.
 
 ## 📊 Usage
 
@@ -154,7 +163,7 @@ Make sure to set up the appropriate environment variables on your deployment pla
 2. **Upload** a student's answer sheet PDF
 3. **Upload** the corresponding teacher's answer key PDF
 4. **Review** the AI-generated evaluation with detailed feedback
-5. **Download** the report as structured pdf
+5. **Download** the report as structured PDF
 
 ## 👨‍💻 Developers
 
