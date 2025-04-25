@@ -68,7 +68,7 @@ const DocumentUploader = () => {
     formData.append('answer_key_pdf', answerKeyPdf);
 
     try {
-      const response = await fetch('http://localhost:8000/process-pdfs', {
+      const response = await fetch('https://evalo.onrender.com/process-pdfs', {
         method: 'POST',
         body: formData,
       });

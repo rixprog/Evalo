@@ -41,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({ gradingResults }) => {
       setIsGenerating(true);
       
       // Make API call to FastAPI backend to generate PDF
-      const response = await fetch('http://localhost:8000/generate-report', {
+      const response = await fetch('https://evalo.onrender.com/generate-report', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
