@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional, Tuple
@@ -6,7 +6,7 @@ import json
 import os
 import tempfile
 import shutil
-import asyncio
+from typing import Optional
 import base64
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
@@ -21,8 +21,22 @@ from groq import Groq
 from dotenv import load_dotenv
 import io
 from fastapi.responses import StreamingResponse
+
+
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+from typing import List, Dict, Any, Optional
+import json
+import os
+import tempfile
+from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.platypus import Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
+import io
+from fastapi.responses import StreamingResponse
 
 load_dotenv()
 
@@ -36,40 +50,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Store active connections and progress state
-active_connections = {}
-progress_data = {}
-
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: Dict[str, WebSocket] = {}
-
-    async def connect(self, websocket: WebSocket, client_id: str):
-        await websocket.accept()
-        self.active_connections[client_id] = websocket
-        # Initialize progress tracking for this client
-        progress_data[client_id] = {
-            "status": "idle",
-            "progress": 0,
-            "message": "Ready to process"
-        }
-
-    def disconnect(self, client_id: str):
-        if client_id in self.active_connections:
-            del self.active_connections[client_id]
-        if client_id in progress_data:
-            del progress_data[client_id]
-
-    async def send_progress_update(self, client_id: str, data: dict):
-        if client_id in self.active_connections:
-            await self.active_connections[client_id].send_json(data)
-
-    async def broadcast(self, message: dict):
-        for connection in self.active_connections.values():
-            await connection.send_json(message)
-
-manager = ConnectionManager()
 
 class GradingResponse(BaseModel):
     total_score: float
@@ -97,39 +77,16 @@ class GradingResults(BaseModel):
     percentage: float
     questions: List[Question]
 
-async def update_progress(client_id: str, status: str, progress: int, message: str):
-    """Update progress data and send to client"""
-    progress_data[client_id] = {
-        "status": status,
-        "progress": progress,
-        "message": message
-    }
-    await manager.send_progress_update(client_id, progress_data[client_id])
 
-def save_pdf_images(pdf_path, output_folder, scale=4, client_id=None):
+def save_pdf_images(pdf_path, output_folder, scale=4):
     os.makedirs(output_folder, exist_ok=True)
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
     pdf = pdfium.PdfDocument(pdf_path)
-    total_pages = len(pdf)
-    
-    for i in range(total_pages):
+    for i in range(len(pdf)):
         page = pdf[i]
         image = page.render(scale=scale).to_pil()
         output_path = os.path.join(output_folder, f"{pdf_name}_{i:03d}.jpg")
         image.save(output_path)
-        
-        # Calculate progress for saving images (0-10%)
-        if client_id:
-            asyncio.create_task(
-                update_progress(
-                    client_id,
-                    "processing",
-                    int(10 * (i + 1) / total_pages),
-                    f"Converting page {i+1}/{total_pages} to image"
-                )
-            )
-    
-    return total_pages
 
 def list_image_paths(folder_path, limit=None):
     try:
@@ -156,14 +113,11 @@ def encode_image(image_path: str) -> str:
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-async def extract_text_and_visuals(
+def extract_text_and_visuals(
     image_paths: List[str], 
     prompt: str, 
     num_images: Optional[int] = None,
-    model: str = "meta-llama/llama-4-scout-17b-16e-instruct",
-    client_id: Optional[str] = None,
-    total_pages: int = 1,
-    processed_pages: int = 0
+    model: str = "meta-llama/llama-4-scout-17b-16e-instruct"
 ) -> List[Dict]:
   
     if num_images:
@@ -183,18 +137,6 @@ async def extract_text_and_visuals(
             "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
             "page_number": idx + 1
         })
-        
-        # Update progress for processing each image (10-40%)
-        if client_id:
-            current_progress = 10 + (40 * (processed_pages + idx + 1) / total_pages)
-            asyncio.create_task(
-                update_progress(
-                    client_id,
-                    "processing", 
-                    int(current_progress),
-                    f"Analyzing page {processed_pages + idx + 1}/{total_pages}"
-                )
-            )
     
     try:
         chat_completion = client.chat.completions.create(
@@ -275,15 +217,8 @@ def extract_text_and_confidence(data: List[Dict]) -> Tuple[str, Dict[int, float]
     
     return combined_text, confidence_scores
 
-async def process_pdf_to_text(
-    pdf_path: str, 
-    output_folder: str, 
-    batch_size: int = 5,
-    client_id: Optional[str] = None
-) -> Tuple[str, Dict[int, float]]:
-    
-    # Save PDF to images and get total page count
-    total_pages = save_pdf_images(pdf_path, output_folder, client_id=client_id)
+def process_pdf_to_text(pdf_path: str, output_folder: str, batch_size: int = 5) -> Tuple[str, Dict[int, float]]:
+    save_pdf_images(pdf_path, output_folder)
     
     combined_text = ""  
     all_confidence_scores = {}  
@@ -316,14 +251,7 @@ async def process_pdf_to_text(
         "No need for any explanation or additional information.\n"
     )
         
-        data = await extract_text_and_visuals(
-            image_paths, 
-            extraction_prompt, 
-            num_images=batch_size, 
-            client_id=client_id,
-            total_pages=total_pages,
-            processed_pages=page_offset
-        )
+        data = extract_text_and_visuals(image_paths, extraction_prompt, num_images=batch_size)
         
         if data:
             for item in data:
@@ -340,43 +268,20 @@ async def process_pdf_to_text(
     
     return combined_text.strip(), all_confidence_scores
 
-async def extract_text_from_pdf(pdf_path, client_id=None):
+def extract_text_from_pdf(pdf_path):
     extracted_text = ""
     try:
         with open(pdf_path, "rb") as pdf_file:
             reader = PyPDF2.PdfReader(pdf_file)
-            total_pages = len(reader.pages)
             
-            for i, page in enumerate(reader.pages):
+            for page in reader.pages:
                 extracted_text += page.extract_text() + "\n"
-                
-                # Update progress for answer key extraction (40-50%)
-                if client_id:
-                    current_progress = 40 + (10 * (i + 1) / total_pages)
-                    asyncio.create_task(
-                        update_progress(
-                            client_id,
-                            "processing", 
-                            int(current_progress),
-                            f"Extracting answer key page {i+1}/{total_pages}"
-                        )
-                    )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred while extracting text: {e}")
     
     return extracted_text
 
-async def grade_student_answers(answer_key: str, student_answer: str, client_id=None) -> Dict:
-    if client_id:
-        asyncio.create_task(
-            update_progress(
-                client_id,
-                "processing", 
-                60,
-                "Grading student answers..."
-            )
-        )
-    
+def grade_student_answers(answer_key: str, student_answer: str) -> Dict:
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     
     try:
@@ -430,39 +335,16 @@ async def grade_student_answers(answer_key: str, student_answer: str, client_id=
             response_format={"type": "json_object"},
         )
         
-        if client_id:
-            asyncio.create_task(
-                update_progress(
-                    client_id,
-                    "processing", 
-                    80,
-                    "Finalizing results..."
-                )
-            )
-            
         response_text = chat_completion.choices[0].message.content
         return json.loads(response_text)
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during grading API call: {e}")
 
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: str):
-    await manager.connect(websocket, client_id)
-    try:
-        while True:
-            # Keep connection alive to receive progress updates
-            data = await websocket.receive_text()
-            if data == "ping":
-                await websocket.send_text("pong")
-    except WebSocketDisconnect:
-        manager.disconnect(client_id)
-
 @app.post("/process-pdfs", response_model=GradingResponse)
 async def process_pdfs(
     student_pdf: UploadFile = File(...),
-    answer_key_pdf: UploadFile = File(...),
-    client_id: Optional[str] = None
+    answer_key_pdf: UploadFile = File(...)
 ):
     # Create temp directories for processing
     temp_dir = tempfile.mkdtemp()
@@ -470,10 +352,6 @@ async def process_pdfs(
     os.makedirs(output_folder, exist_ok=True)
     
     try:
-        # Initial progress update
-        if client_id:
-            await update_progress(client_id, "processing", 0, "Starting processing...")
-        
         # Save uploaded files to temp location
         student_pdf_path = os.path.join(temp_dir, student_pdf.filename)
         answer_key_path = os.path.join(temp_dir, answer_key_pdf.filename)
@@ -485,38 +363,28 @@ async def process_pdfs(
             shutil.copyfileobj(answer_key_pdf.file, f)
         
         # Process student PDF
-        student_text, confidence_scores = await process_pdf_to_text(
-            student_pdf_path, 
-            output_folder, 
-            batch_size=1, 
-            client_id=client_id
-        )
+        student_text, confidence_scores = process_pdf_to_text(student_pdf_path, output_folder, batch_size=1)
         
         # Extract text from answer key
-        answer_key_text = await extract_text_from_pdf(answer_key_path, client_id=client_id)
+        answer_key_text = extract_text_from_pdf(answer_key_path)
         
         # Grade student answers
-        grading_result = await grade_student_answers(answer_key_text, student_text, client_id=client_id)
-        
-        # Complete progress
-        if client_id:
-            await update_progress(client_id, "complete", 100, "Processing complete!")
+        grading_result = grade_student_answers(answer_key_text, student_text)
         
         return grading_result
         
     except Exception as e:
-        # Update progress with error
-        if client_id:
-            await update_progress(client_id, "error", 0, str(e))
         raise HTTPException(status_code=500, detail=str(e))
     
     finally:
-        # Clean up temporary files with better error handling
+       
+    # Clean up temporary files with better error handling
         try:
             shutil.rmtree(temp_dir)
         except PermissionError:
             # Log the error but don't crash
             print(f"Warning: Could not delete temporary directory {temp_dir} - it will be cleaned up later")
+
 
 @app.post("/generate-report")
 async def generate_pdf_report(grading_results: GradingResults):
