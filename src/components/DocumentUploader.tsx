@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import Dashboard from './Dashboard';
 
 const DocumentUploader = () => {
-  const [studentPdf, setStudentPdf] = useState(null);
-  const [answerKeyPdf, setAnswerKeyPdf] = useState(null);
+  const [studentPdf, setStudentPdf] = useState<File | null>(null);
+  const [answerKeyPdf, setAnswerKeyPdf] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [gradingResults, setGradingResults] = useState(null);
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('');
 
-  const handleStudentPdfChange = (e) => {
-    if (e.target.files[0]) {
+  const handleStudentPdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
       setStudentPdf(e.target.files[0]);
     }
   };
 
-  const handleAnswerKeyPdfChange = (e) => {
-    if (e.target.files[0]) {
+  const handleAnswerKeyPdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
       setAnswerKeyPdf(e.target.files[0]);
     }
   };
@@ -49,7 +49,7 @@ const DocumentUploader = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!studentPdf || !answerKeyPdf) {
@@ -83,7 +83,7 @@ const DocumentUploader = () => {
       
       const data = await response.json();
       setGradingResults(data);
-    } catch (error) {
+    }  catch (error: any) { // or create a more specific error type
       console.error('Error uploading files:', error);
       setError(`Failed to process PDFs: ${error.message}`);
       setStatusText('Failed');
@@ -93,7 +93,7 @@ const DocumentUploader = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-10">
+    <div className="max-w-4xl mx-auto">
       {!gradingResults ? (
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-700 via-purple-500 to-indigo-500">

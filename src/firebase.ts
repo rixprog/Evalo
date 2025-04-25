@@ -1,6 +1,14 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider,createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'; 
+// Only import what you're using
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+// If you need the other imports later, you can add them back
+
+// Or comment them to acknowledge you're aware they're unused but keeping for later
+// import { getAuth, GoogleAuthProvider, 
+//   /* Commented out as currently unused but may need later: */ 
+//   /* createUserWithEmailAndPassword, signInWithEmailAndPassword */
+// } from 'firebase/auth';
 
 
 
