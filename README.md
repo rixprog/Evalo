@@ -2,102 +2,143 @@
   <img src="https://raw.githubusercontent.com/rixprog/evalo/main/public/evalo-logo.png" alt="Evalo Logo" width="300" />
 </p>
 
-<h1 align="center">Evalo</h1>
-<p align="center"><strong>AI-Based Exam Paper Evaluator</strong></p>
+# 🚀 Evalo: AI-Based Exam Paper Evaluator
+
+> Correct answer sheets with ease using AI. Smart feedback. Fast grading.
+
+---
+
+## 📌 Problem Statement
+
+**Problem Statement 12 – Revolutionizing Educational Assessment**
+
+---
+
+## 🎯 Objective
+
+Evalo solves the tedious and time-consuming process of evaluating student exam papers, particularly those with handwritten mathematical expressions, complex diagrams, and challenging handwriting styles. It serves educators at all levels who need to grade papers efficiently while providing meaningful feedback to students.
+
+Our platform automates the evaluation process, allowing teachers to focus on teaching rather than grading while ensuring consistent assessment quality.
+
+---
+
+## 🧠 Team & Approach
+
+### Team Name:  
+`Yukti`
+
+### Team Members:  
+- Riswan Muhammed M S ([GitHub](https://github.com/rixprog) / Full Stack Developer)
+- Surya Narayanana K V ([GitHub](https://github.com/suryanarayanankv) / AI Integration Specialist)
+
+### Your Approach:  
+- We chose this problem because grading papers is one of the most time-consuming tasks for educators, leaving less time for actual teaching and curriculum development
+- Key challenges we addressed include:
+  - Accurately interpreting diverse handwriting styles
+  - Evaluating complex mathematical expressions without errors
+  - Understanding and assessing student-drawn diagrams and illustrations
+  - Creating meaningful, contextual feedback based on student answers
+- Our breakthrough moment came when we successfully integrated Groq's API to dramatically speed up the evaluation process while maintaining high accuracy
+
+---
+
+## 🛠️ Tech Stack
+
+### Core Technologies Used:
+- Frontend: React, TypeScript, Vite, Tailwind CSS
+- Backend: FastAPI (Python)
+- Database: Firebase
+- APIs: Groq API 
+- Hosting: Netlify (Frontend), Render (Backend)
+
+### Sponsor Technologies Used (if any):
+- ✅ **Groq:** _Groq's lightning-fast API forms the backbone of our evaluation engine, delivering results in seconds rather than minutes. Its superior natural language understanding enabled us to accurately interpret complex mathematical expressions and technical content in handwritten form. Without Groq's exceptional speed and precision, Evalo's core functionality would be significantly compromised—the API's performance was truly transformative for our project's success._
+
+---
+
+## ✨ Key Features
+
+Highlight the most important features of your project:
+
+- ✅ **Handwriting Recognition:** Accurately processes even difficult handwriting styles
+- ✅ **Mathematical Expression Analysis:** Evaluates complex formulas, equations, and calculations  
+- ✅ **Diagram Interpretation:** Understands and assesses student-drawn diagrams and illustrations  
+- ✅ **Detailed Feedback:** Identifies mistakes and offers suggestions for improvement
+- ✅ **Downloadable Reports:** Export evaluations as structured PDFs
+
+
+### Screenshots
 
 <p align="center">
-  <a href="https://evaloai.netlify.app/">Live Demo</a> •
-  <a href="#-about">About</a> •
-  <a href="#-features">Features</a> •
-  <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-getting-started">Getting Started</a> •
-  <a href="#-usage">Usage</a> •
-  <a href="#-developers">Developers</a>
+  <img src="screenshots\Screenshot 2025-04-27 214428.png" alt="Login Screen" width="45%" style="vertical-align: top;" />
+  <img src="screenshots\Screenshot 2025-04-27 214506.png" alt="Upload Interface" width="45%" style="vertical-align: top;" />
+  <p align="center"><em>Left: Login Screen | Right: Upload Interface for exam papers</em></p>
 </p>
 
 <p align="center">
-  <strong>🚀 Correct answer sheets with ease using AI. Smart feedback. Fast grading.</strong>
+  <img src="screenshots\Screenshot 2025-04-27 214842.png" alt="Processing Screen" width="45%" height = "200% style="vertical-align: middle;" />
+  <img src="screenshots\Evalo.png" alt="Results Dashboard" width="45%" style="vertical-align: top;" />
+  <p align="center"><em>Left: Processing uploaded files | Right: Detailed exam results dashboard</em></p>
 </p>
 
 <p align="center">
-  <em>Specialized in analyzing handwritten mathematical expressions, complex diagrams, and even the most challenging handwriting styles!</em>
+  <img src="screenshots\exam-results-report (3)_000.jpg" alt="Exam Report PDF Page 1" width="45%" style="vertical-align: top;" />
+  <img src="screenshots\exam-results-report (3)_001.jpg" alt="Exam Report PDF Page 2" width="45%" style="vertical-align: top;" />
+  <p align="center"><em>Left & Right: Downloadable exam result report with detailed feedback</em></p>
 </p>
 
 ---
 
-## 📚 About
+## 📽️ Demo & Deliverables
 
-Evalo is a modern exam paper correction platform that automates the tedious task of evaluating student answer sheets. Simply upload the student's answer sheet PDF and the teacher's answer key — Evalo will instantly process the documents, evaluate each answer using advanced AI, and deliver precise scores with detailed feedback.
+- **Demo Video Link:** [Evalo Demo](https://www.loom.com/share/evalodemovideo)  
+- **Live Demo:** [https://evaloai.netlify.app/](https://evaloai.netlify.app/)
+- **Pitch Deck Link:** [Evalo Pitch Deck](https://docs.google.com/presentation/d/evalo)  
 
-The platform excels at processing handwritten content, including sophisticated mathematical expressions, technical diagrams, and various handwriting styles. Whether students write neatly or have challenging penmanship, Evalo's advanced AI can accurately interpret and evaluate their work.
+---
 
-## ✨ Features
+## ✅ Tasks & Bonus Checklist
 
-- 📄 **PDF Upload:** Upload student answer sheets and teacher answer keys in PDF format
-- ✏️ **Handwriting Recognition:** Accurately processes even difficult handwriting styles
-- 🧮 **Mathematical Expression Analysis:** Evaluates complex formulas, equations, and calculations
-- 📊 **Diagram Interpretation:** Understands and assesses student-drawn diagrams and illustrations
-- ⚡ **Groq API Integration:** Fast and intelligent text processing for accurate evaluations
-- 🧠 **AI-Powered Analysis:** Evaluates each answer, checks correctness, and provides comprehensive review
-- 💬 **Detailed Feedback:** Identifies mistakes and offers suggestions for improvement
-- 🔐 **Secure Authentication:** Google and Email sign-in via Firebase
-- 📊 **Downloadable Reports:** Export evaluations as structured PDFs
+- [✅] **All members of the team completed the mandatory task - Followed at least 2 of our social channels and filled the form**
+- [✅] **All members of the team completed Bonus Task 1 - Sharing of Badges and filled the form (2 points)**
+- [✅] **All members of the team completed Bonus Task 2 - Signing up for Sprint.dev and filled the form (3 points)**
 
-## 🔧 Tech Stack
+---
 
-| Component | Technologies |
-|-----------|-------------|
-| **Frontend** | React, TypeScript, Vite, Tailwind CSS |
-| **Backend** | FastAPI (Python) |
-| **AI Integration** | Groq API |
-| **Authentication** | Firebase (Google & Email) |
-| **PDF Processing** | Custom extraction pipeline |
+## 🧪 How to Run the Project
 
-## 📁 Project Structure
-
-```
-evalo/
-├── src/                 # React frontend (Vite + Tailwind)
-├── server.py            # FastAPI backend (Python)
-├── requirements.txt     # Python backend dependencies
-└── README.md
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
+### Requirements:
 - Node.js (v16+)
 - Python (v3.8+)
 - npm or yarn
 - Git
+- Groq API Key
+- Firebase account
 
-### Installation
-
-1. **Clone the repository**
-
+### Local Setup:
 ```bash
+# Clone the repo
 git clone https://github.com/rixprog/evalo.git
 cd evalo
-```
 
-2. **Install Frontend Dependencies**
-
-```bash
-# In the project root
+# Install frontend dependencies
 npm install
-```
 
-3. **Install Backend Dependencies**
-
-```bash
-# In the project root
+# Install backend dependencies
 pip install -r requirements.txt
+
+# Set up environment variables (.env file)
+# See Configuration section below
+
+# Start the backend
+uvicorn server:app --reload
+
+# Start the frontend (in another terminal)
+npm run dev
 ```
 
-### Configuration
-
-1. **Create a `.env` file in the project root**
+### Configuration:
+Create a `.env` file in the project root with the following:
 
 ```
 # Backend
@@ -105,7 +146,6 @@ GROQ_API_KEY=your_groq_api_key
 PORT=8000
 
 # Frontend
-# Note: Change the fetch links in components with your localhost API endpoints
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
 VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
@@ -114,134 +154,33 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
 VITE_FIREBASE_APP_ID=your_firebase_app_id
 ```
 
-2. **Firebase Setup**
-   - Create a project on [Firebase Console](https://console.firebase.google.com/)
-   - Enable Google and Email Authentication
-   - Add your web app to the Firebase project
-   - Copy the config values to your `.env` file
+---
 
-3. **Groq API Setup**
-   - Sign up for [Groq](https://console.groq.com/)
-   - Generate an API key
-   - Add the API key to your `.env` file
+## 🧬 Future Scope
 
-### Running Locally
+- 📈 **Expanded Subject Support:** Add specialized modules for chemistry, physics, and other technical subjects 
+- 🛡️ **Institution Integration:** Direct integration with learning management systems (LMS)
+- 🌐 **Multi-language Support:** Evaluate papers in languages beyond English
+- 🧠 **Advanced Analytics:** Provide insights into common student misconceptions and learning gaps
+- 📱 **Mobile App:** Develop a companion mobile application for on-the-go grading
 
-1. **Start the Backend**
+---
 
-```bash
-# In the project root
-uvicorn server:app --reload
-```
+## 📎 Resources / Credits
 
-2. **Start the Frontend**
-
-```bash
-# In another terminal, in the project root
-npm run dev
-```
-
-3. **Access the Application**
-
-Open your browser and navigate to:
-```
-http://localhost:5173/
-```
-
-## 🌐 Deployment
-
-### Frontend Deployment (Netlify)
-
-1. Connect your GitHub repository to Netlify
-2. Set build command to `npm run build`
-3. Set publish directory to `dist`
-4. Add environment variables from your `.env` file
-
-### Backend Deployment Options
-
-- **Render**
-- **Heroku**
-- **AWS Lambda**
-- **GCP Cloud Functions**
-
-> ⚠️ Remember to set up the appropriate environment variables on your deployment platform.
-
-## 📊 Usage
-
-1. **Sign in** using Google or Email authentication
-2. **Upload** a student's answer sheet PDF
-3. **Upload** the corresponding teacher's answer key PDF
-4. **Review** the AI-generated evaluation with detailed feedback
-5. **Download** the report as structured PDF
-
-   
-## 📋 Document Preparation Guidelines
-
-### Answer Key Guidelines
-
-For optimal results when uploading answer keys:
-
-1. **Ensure Question Numbers are Clearly Visible**: 
-   Example: "Question 1: LED Characteristics (5 marks)"
-
-2. **Include Clear Grading Criteria**: 
-   Example: "Forward Voltage Characteristic (1 mark), Proper labeling (1 mark), Current analysis (1 mark)"
-
-3. **Add Visual Clarity**: 
-   Example: Include a properly labeled I-V curve diagram showing threshold voltage and current flow
-
-4. **Include Grading Guidelines**: 
-   Example: "5 marks: All characteristics accurately drawn with proper labels and axes
-   4 marks: Correct curve with minor labeling issues
-   3 marks: Basic understanding shown but missing key features"
-
-5. **Maintain Consistent Formatting**: 
-   Example: Use the same structure for all questions: number, title, marks, expected elements, grading criteria
-
-6. **Add Overall Scoring Information**: 
-   Example: "Total available marks: 15, Pass mark: 8 (53%), Distinction threshold: 12 (80%)"
-
-The better structured your answer key, the more accurate the AI evaluation will be.
-
-### Student Answer Sheet Guidelines
-
-For accurate evaluation of student answers:
-
-1. **Ensure Page Clarity**: 
-   Example: Use good lighting when scanning or photographing answers, avoid shadows or glare
-
-2. **Check Complete Document Scan**: 
-   Example: If the exam has 5 pages, verify all 5 pages are included in the PDF
-
-3. **Verify Question Numbers**: 
-   Example: Each answer should be clearly marked with "Q1", "Question 1", or similar identifier
-
-4. **Review PDF Quality**: 
-   Example: Scan at 300 DPI or higher, check that all text and diagrams are sharp and readable
-
-5. **Confirm Readability**: 
-   Example: Handwritten equations like "∫(x²+1)dx = x³/3+x+C" should be clearly written
-
-6. **Check Diagram Visibility**: 
-   Example: Circuit diagrams should show all components and connections clearly
-
-7. **Maintain Consistent Page Orientation**: 
-   Example: All pages should be oriented the same way (portrait or landscape) without rotation
-
-For handwritten mathematical expressions and diagrams, our AI is specially optimized to interpret and evaluate these elements accurately.
-## 👨‍💻 Developers
-
-- **Riswan Muhammed M S** - [rixprog](https://github.com/rixprog)
-- **Surya Narayanana K V** - [suryanarayanankv](https://github.com/suryanarayanankv)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgements
-
-- [Groq](https://console.groq.com/) for providing the powerful AI API
+- [Groq API](https://console.groq.com/) for AI-powered text processing
 - [Firebase](https://firebase.google.com/) for authentication services
 - [FastAPI](https://fastapi.tiangolo.com/) for the efficient backend framework
 - [React](https://reactjs.org/) and [Vite](https://vitejs.dev/) for the frontend framework
 - [Tailwind CSS](https://tailwindcss.com/) for styling
+
+---
+
+## 🏁 Final Words
+
+Our hackathon journey with Evalo has been incredibly rewarding. The challenge of accurately interpreting handwritten content, particularly complex mathematical expressions, pushed our technical skills to new heights. We're proud to have created a solution that genuinely addresses a pain point for educators worldwide.
+
+Special thanks to the hackathon organizers and Groq for providing the powerful API that made our vision possible. We look forward to continuing development on Evalo beyond this hackathon!
+
+---
+
