@@ -10,7 +10,7 @@
 
 ## 📌 Problem Statement
 
-**Problem Statement 12 – Revolutionizing Educational Assessment**
+**Problem Statement 1 – Weave AI magic with Groq**
 
 ---
 
