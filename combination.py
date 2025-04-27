@@ -316,7 +316,8 @@ def extract_text_from_pdf(pdf_path):
     
     return extracted_text
 
-
+# def normalize_text(text: str) -> str:
+#     return " ".join(text.split())  
 
 def grade_student_answers(answer_key: str, student_answer: str) -> str:
 
@@ -325,51 +326,50 @@ def grade_student_answers(answer_key: str, student_answer: str) -> str:
     chat_completion = client.chat.completions.create(
         messages=[
             {
-                "role": "system",
-                "content": f"""
-                You are an expert evaluator grading student answers against an answer key. 
-                Evaluate each student response based on the marking scheme provided in the answer key. Verify whether the required points are awarded for the corresponding criteria and ensure that the content is sufficiently detailed and comprehensive for the allocated marks.
-                The output must be in JSON format following this schema:
-                {{
-                    "total_score": ,
-                    "total_possible": ,
-                    "percentage": ,
-                    "questions": [
-                        {{
-                            "question_number": ,
-                            "points_earned": ,
-                            "points_possible": ,
-                            "justification": "",
-                            "feedback": ""
-                        }}
-                        // More items for each question...
-                    ]
-                }}
-                The total_score should be the sum of points_earned for each question.
-                
-                """
-            },
-            {
-                "role": "user",
-                "content": f"""
-                ANSWER KEY:
-                {answer_key}
+            "role": "system",
+            "content": f"""
+            You are an expert evaluator grading student answers against an answer key. 
+            Evaluate each student response based on the marking scheme provided in the answer key. Verify whether the required points are awarded for the corresponding criteria and ensure that the content is sufficiently detailed and comprehensive for the allocated marks.
+            The output must be in JSON format following this schema:
+            {{
+                "total_score": ,
+                "total_possible": ,
+                "percentage": ,
+                "questions": [
+                    {{
+                        "question_number": ,
+                        "points_earned": ,
+                        "points_possible": ,
+                        "justification": "",
+                        "feedback": ""
+                    }}
+                    // More items for each question...
+                ]
+            }}
+            The total_score should be the sum of points_earned for each question.
+            """
+        },
+        {
+            "role": "user",
+            "content": f"""
+            first one is the student answer and the second one is the answer_key. Don't get confused by the order of the two.
+            STUDENT ANSWER:
+            {student_answer}
 
-                STUDENT ANSWER:
-                {student_answer}
+            ANSWER KEY:
+            {answer_key}
 
-                Instructions:
-                1. Compare each student response to the corresponding question in the answer key.
-                2. Award points based on how well the student answer matches the criteria in the marking scheme.
-                3. Provide brief justification for each score.
-                4. Calculate the total score earned correctly.
-                5. Provide feedback for each question 
-                """
-            }
+            Instructions:
+            1. Compare each student response to the corresponding question in the answer key.
+            2. Award points based on how well the student answer matches the criteria in the marking scheme.
+            3. Provide brief justification for each score.
+            4. Calculate the total score earned correctly.
+            5. Provide feedback for each question.
+            6. note that the figures drwan by the studnet will not be given directly but the description of the figure will be given. So you need to check the description of the figure and then give the score.
+            """
+        }
         ],
-        model="meta-llama/llama-4-scout-17b-16e-instruct",#meta-llama/llama-4-maverick-17b-128e-instruct
-        temperature=0,
-        stream=False,
+        model="meta-llama/llama-4-maverick-17b-128e-instruct",
         response_format={"type": "json_object"},
     )
     
@@ -526,7 +526,6 @@ def extract_text_from_evaluations(gmail):
     for idx, record in enumerate(evaluation_data, start=1):
         try:
             record_info = f"Processing Record {idx}: {record}"
-            # print(record_info)
             
             formatted_output += f"{record_info}\n\n"
             
@@ -566,6 +565,7 @@ def main():
     combined_text = convert_latex_to_text(combined_text)
     print("converted one")
     print(combined_text)
+
     
     print("\nConfidence Scores:")
     for page, score in sorted(confidence_scores.items()):
@@ -577,6 +577,7 @@ def main():
     answer_key_path = input("Enter the path to the answer key PDF file: ")
     answer_key = extract_text_from_pdf(answer_key_path)
     print(answer_key)
+
     data = grade_student_answers(answer_key, combined_text)
     print(data[0])
     print(type(data[0]))
