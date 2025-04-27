@@ -174,6 +174,61 @@ http://localhost:5173/
 4. **Review** the AI-generated evaluation with detailed feedback
 5. **Download** the report as structured PDF
 
+   
+## 📋 Document Preparation Guidelines
+
+### Answer Key Guidelines
+
+For optimal results when uploading answer keys:
+
+1. **Ensure Question Numbers are Clearly Visible**: 
+   Example: "Question 1: LED Characteristics (5 marks)"
+
+2. **Include Clear Grading Criteria**: 
+   Example: "Forward Voltage Characteristic (1 mark), Proper labeling (1 mark), Current analysis (1 mark)"
+
+3. **Add Visual Clarity**: 
+   Example: Include a properly labeled I-V curve diagram showing threshold voltage and current flow
+
+4. **Include Grading Guidelines**: 
+   Example: "5 marks: All characteristics accurately drawn with proper labels and axes
+   4 marks: Correct curve with minor labeling issues
+   3 marks: Basic understanding shown but missing key features"
+
+5. **Maintain Consistent Formatting**: 
+   Example: Use the same structure for all questions: number, title, marks, expected elements, grading criteria
+
+6. **Add Overall Scoring Information**: 
+   Example: "Total available marks: 15, Pass mark: 8 (53%), Distinction threshold: 12 (80%)"
+
+The better structured your answer key, the more accurate the AI evaluation will be.
+
+### Student Answer Sheet Guidelines
+
+For accurate evaluation of student answers:
+
+1. **Ensure Page Clarity**: 
+   Example: Use good lighting when scanning or photographing answers, avoid shadows or glare
+
+2. **Check Complete Document Scan**: 
+   Example: If the exam has 5 pages, verify all 5 pages are included in the PDF
+
+3. **Verify Question Numbers**: 
+   Example: Each answer should be clearly marked with "Q1", "Question 1", or similar identifier
+
+4. **Review PDF Quality**: 
+   Example: Scan at 300 DPI or higher, check that all text and diagrams are sharp and readable
+
+5. **Confirm Readability**: 
+   Example: Handwritten equations like "∫(x²+1)dx = x³/3+x+C" should be clearly written
+
+6. **Check Diagram Visibility**: 
+   Example: Circuit diagrams should show all components and connections clearly
+
+7. **Maintain Consistent Page Orientation**: 
+   Example: All pages should be oriented the same way (portrait or landscape) without rotation
+
+For handwritten mathematical expressions and diagrams, our AI is specially optimized to interpret and evaluate these elements accurately.
 ## 👨‍💻 Developers
 
 - **Riswan Muhammed M S** - [rixprog](https://github.com/rixprog)
