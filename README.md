@@ -1,4 +1,6 @@
-![github-submission-banner](https://github.com/user-attachments/assets/a1493b84-e4e2-456e-a791-ce35ee2bcf2f)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/rixprog/evalo/main/public/evalo-logo.png" alt="Evalo Logo" width="300" />
+</p>
 
 # 🚀 Evalo: AI-Based Exam Paper Evaluator
 
@@ -23,7 +25,7 @@ Our platform automates the evaluation process, allowing teachers to focus on tea
 ## 🧠 Team & Approach
 
 ### Team Name:  
-`EvaloBrains`
+`Yukti`
 
 ### Team Members:  
 - Riswan Muhammed M S ([GitHub](https://github.com/rixprog) / Full Stack Developer)
@@ -64,8 +66,25 @@ Highlight the most important features of your project:
 - ✅ **Detailed Feedback:** Identifies mistakes and offers suggestions for improvement
 - ✅ **Downloadable Reports:** Export evaluations as structured PDFs
 
+
+### Screenshots
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/rixprog/evalo/main/public/evalo-logo.png" alt="Evalo Logo" width="300" />
+  <img src="screenshots\Screenshot 2025-04-27 214428.png" alt="Login Screen" width="45%" style="vertical-align: top;" />
+  <img src="screenshots\Screenshot 2025-04-27 214506.png" alt="Upload Interface" width="45%" style="vertical-align: top;" />
+  <p align="center"><em>Left: Login Screen | Right: Upload Interface for exam papers</em></p>
+</p>
+
+<p align="center">
+  <img src="screenshots\Screenshot 2025-04-27 214842.png" alt="Processing Screen" width="45%" height = "200% style="vertical-align: middle;" />
+  <img src="screenshots\Evalo.png" alt="Results Dashboard" width="45%" style="vertical-align: top;" />
+  <p align="center"><em>Left: Processing uploaded files | Right: Detailed exam results dashboard</em></p>
+</p>
+
+<p align="center">
+  <img src="screenshots\exam-results-report (3)_000.jpg" alt="Exam Report PDF Page 1" width="45%" style="vertical-align: top;" />
+  <img src="screenshots\exam-results-report (3)_001.jpg" alt="Exam Report PDF Page 2" width="45%" style="vertical-align: top;" />
+  <p align="center"><em>Left & Right: Downloadable exam result report with detailed feedback</em></p>
 </p>
 
 ---
