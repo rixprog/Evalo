@@ -91,9 +91,9 @@ Highlight the most important features of your project:
 
 ## 📽️ Demo & Deliverables
 
-- **Demo Video Link:** [Evalo Demo](https://www.loom.com/share/evalodemovideo)  
+- **Demo Video Link:** [Evalo Demo](https://www.youtube.com/watch?v=1WDlwSsLLmo)  
 - **Live Demo:** [https://evaloai.netlify.app/](https://evaloai.netlify.app/)
-- **Pitch Deck Link:** [Evalo Pitch Deck](https://docs.google.com/presentation/d/evalo)  
+- **Pitch Deck Link:** [Evalo Pitch Deck](https://docs.google.com/presentation/d/1a4ccQVXvOY_rMfEjZn-pqcFzSHcXKExg/edit?slide=id.p6#slide=id.p6)  
 
 ---
 
